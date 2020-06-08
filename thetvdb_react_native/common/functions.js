@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import {BASE_URL} from '../config';
 
 export async function getJWTToken() {
   try {
@@ -15,7 +16,7 @@ export async function getJWTToken() {
 }
 
 export function generateJwtToken() {
-  const url = 'https://api.thetvdb.com/login';
+  const url = `${BASE_URL}login`;
 
   axios
     .post(url, {

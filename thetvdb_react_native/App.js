@@ -1,6 +1,4 @@
 import React from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-import axios from 'axios';
 import SearchBar from './components/SearchBar';
 import SeriesDetails from './components/SeriesDetails';
 import {createAppContainer} from 'react-navigation';
@@ -22,7 +20,6 @@ const AppContainer = createAppContainer(RootStack);
 export default class App extends React.Component {
   componentDidMount() {
     generateJwtToken();
-    console.log(BASE_URL);
   }
 
   render() {
