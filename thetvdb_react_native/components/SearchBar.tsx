@@ -3,7 +3,7 @@ import axios from 'axios';
 import ResultList from './ResultList';
 import {getJWTToken} from '../common/functions';
 // @ts-ignore
-import {BASE_URL} from 'react-native-dotenv';
+import {BASE_URL} from '../config';
 
 import {
   View,

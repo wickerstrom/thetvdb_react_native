@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 // @ts-ignore
-import {APIKEY, USERNAME, USERKEY, BASE_URL} from 'react-native-dotenv';
+import {APIKEY, USERNAME, USERKEY} from 'react-native-dotenv';
+import {BASE_URL} from '../config';
 
 export async function getJWTToken() {
   try {

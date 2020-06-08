@@ -4,7 +4,7 @@ import {withNavigation} from 'react-navigation';
 import axios from 'axios';
 import {getJWTToken} from '../common/functions';
 // @ts-ignore
-import {BASE_URL} from 'react-native-dotenv';
+import {BASE_URL} from '../config';
 
 interface IProps {
   navigation: any;
