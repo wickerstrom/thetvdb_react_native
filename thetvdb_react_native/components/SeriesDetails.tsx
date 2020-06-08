@@ -3,7 +3,8 @@ import {View, Text, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import axios from 'axios';
 import {getJWTToken} from '../common/functions';
-import {BASE_URL} from '../config';
+// @ts-ignore
+import {BASE_URL} from 'react-native-dotenv';
 
 interface IProps {
   navigation: any;
