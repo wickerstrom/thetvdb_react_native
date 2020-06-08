@@ -2,11 +2,15 @@ import React from 'react';
 import {TouchableOpacity, View, FlatList, StyleSheet, Text} from 'react-native';
 import {withNavigation} from 'react-navigation';
 
-function ResultList(props) {
+export interface IProps {
+  searchResult: Array<JSON>;
+}
+
+const ResultList: React.FC<IProps> = (props: any) => {
   return (
     <FlatList
       data={props.searchResult}
-      renderItem={({item}) => (
+      renderItem={({item}: {item: any}) => (
         <TouchableOpacity
           onPress={() =>
             props.navigation.navigate('Details', {
@@ -14,16 +18,15 @@ function ResultList(props) {
             })
           }>
           <View style={styles.item}>
-            <Text style={styles.title}>{item.seriesName}</Text>
+            <Text>{item.seriesName}</Text>
           </View>
         </TouchableOpacity>
       )}
-      keyExtractor={item => item.id.toString()}
-      onEndThreshold={0}
+      keyExtractor={(item: any) => item.id.toString()}
       contentContainerStyle={{paddingBottom: 45}}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   item: {

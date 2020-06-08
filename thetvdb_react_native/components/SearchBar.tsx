@@ -12,11 +12,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-type Props = {};
+interface IProps {}
 
-type State = {searchText: string; searchResult: Array<JSON>};
+interface IState {
+  searchText: string;
+  searchResult: Array<JSON>;
+  isLoading: boolean;
+  statusText: string;
+}
 
-class SearchBar extends React.Component<Props, State> {
+class SearchBar extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -33,7 +38,7 @@ class SearchBar extends React.Component<Props, State> {
           <TextInput
             placeholder="Search..."
             style={styles.input}
-            onChangeText={e => this.handleChange(e)}
+            onChangeText={(e: String) => this.handleChange(e)}
             value={this.state.searchText}
           />
           <TouchableOpacity
@@ -41,7 +46,7 @@ class SearchBar extends React.Component<Props, State> {
             onPress={() => {
               this.getAllSeriesInfo(this.state.searchText);
             }}>
-            <Text style={styles.btnText}>Search </Text>
+            <Text style={styles.btnText}>Search</Text>
           </TouchableOpacity>
         </View>
         {this.state.isLoading ? (
@@ -65,10 +70,12 @@ class SearchBar extends React.Component<Props, State> {
     }
   }
 
-  async getSeriesSearchResult(searchText: string, jwtToken: string) {
+  async getSeriesSearchResult(
+    searchText: string,
+    jwtToken: string | null | undefined,
+  ) {
     this.setState({isLoading: true, statusText: 'Loading ...'});
     const url = `${BASE_URL}search/series?name=${searchText}`;
-    console.log(url);
     try {
       const config = {
         headers: {Authorization: `Bearer ${jwtToken}`},
@@ -79,7 +86,6 @@ class SearchBar extends React.Component<Props, State> {
       return response;
     } catch (error) {
       if (error.response.status === 404) {
-        console.log('No result found');
         this.setState({statusText: 'No result found.'});
       } else {
         console.log(error.response);
@@ -87,7 +93,7 @@ class SearchBar extends React.Component<Props, State> {
     }
   }
 
-  handleChange = e => {
+  handleChange = (e: any) => {
     this.setState({searchText: e});
   };
 }

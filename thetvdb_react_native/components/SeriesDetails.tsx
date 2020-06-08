@@ -1,10 +1,20 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import axios from 'axios';
 import {getJWTToken} from '../common/functions';
+import {BASE_URL} from '../config';
 
-class SeriesDetails extends Component {
+interface IProps {
+  navigation: any;
+}
+
+interface IState {
+  seriesInfo: Array<JSON>;
+  isLoading: boolean;
+}
+
+class SeriesDetails extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -33,9 +43,9 @@ class SeriesDetails extends Component {
     return response;
   }
 
-  async getSeriesDetails(id: string, jwtToken: string) {
+  async getSeriesDetails(id: string, jwtToken: string | null | undefined) {
     this.setState({isLoading: true});
-    const url = `https://api.thetvdb.com/series/${id}`;
+    const url = `${BASE_URL}series/${id}`;
 
     try {
       const config = {
