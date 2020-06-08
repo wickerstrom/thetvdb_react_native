@@ -2,14 +2,6 @@ import React from 'react';
 import {TouchableOpacity, View, FlatList, StyleSheet, Text} from 'react-native';
 import {withNavigation} from 'react-navigation';
 
-function Item({title}) {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
-}
-
 function ResultList(props) {
   return (
     <FlatList
@@ -27,22 +19,20 @@ function ResultList(props) {
         </TouchableOpacity>
       )}
       keyExtractor={item => item.id.toString()}
+      onEndThreshold={0}
+      contentContainerStyle={{paddingBottom: 45}}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: 'white',
     padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+    marginVertical: 4,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
   },
 });
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -65,18 +65,36 @@ class SeriesDetails extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View>
         {this.state.isLoading ? (
           <Text>'Loading ...'</Text>
         ) : (
-          <View>
-            <Text>{this.state.seriesInfo.seriesName}</Text>
-            <Text>{this.state.seriesInfo.overview}</Text>
+          <View style={styles.seriesDetailsView}>
+            <Text style={styles.seriesNameText}>
+              {this.state.seriesInfo.seriesName}
+            </Text>
+            <Text style={styles.seriesOverviewText}>
+              {this.state.seriesInfo.overview}
+            </Text>
           </View>
         )}
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  seriesNameText: {
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  seriesDetailsView: {
+    marginTop: 5,
+  },
+  seriesOverviewText: {
+    textAlign: 'justify',
+    padding: 5,
+  },
+});
 
 export default withNavigation(SeriesDetails);

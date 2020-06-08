@@ -22,26 +22,29 @@ class SearchBar extends React.Component<myProps, myState> {
       searchText: '',
       searchResult: [],
       isLoading: false,
+      statusText: 'Loading ...',
     };
   }
   render() {
     return (
       <View>
-        <TextInput
-          placeholder="Search..."
-          style={styles.input}
-          onChangeText={e => this.handleChange(e)}
-          value={this.state.searchText}
-        />
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            this.getAllSeriesInfo(this.state.searchText);
-          }}>
-          <Text style={styles.btnText}>Search </Text>
-        </TouchableOpacity>
+        <View style={styles.searchBarView}>
+          <TextInput
+            placeholder="Search..."
+            style={styles.input}
+            onChangeText={e => this.handleChange(e)}
+            value={this.state.searchText}
+          />
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              this.getAllSeriesInfo(this.state.searchText);
+            }}>
+            <Text style={styles.btnText}>Search </Text>
+          </TouchableOpacity>
+        </View>
         {this.state.isLoading ? (
-          <Text>'Loading ...'</Text>
+          <Text style={styles.loadingText}>{this.state.statusText}</Text>
         ) : (
           <ResultList searchResult={this.state.searchResult} />
         )}
@@ -63,7 +66,7 @@ class SearchBar extends React.Component<myProps, myState> {
   }
 
   async getSeriesSearchResult(searchText: string, jwtToken: string) {
-    this.setState({isLoading: true});
+    this.setState({isLoading: true, statusText: 'Loading ...'});
     const url = `https://api.thetvdb.com/search/series?name=${searchText}`;
 
     try {
@@ -75,8 +78,12 @@ class SearchBar extends React.Component<myProps, myState> {
       this.setState({isLoading: false});
       return response;
     } catch (error) {
-      this.setState({isLoading: false});
-      console.log(error);
+      if (error.response.status === 404) {
+        console.log('No result found');
+        this.setState({statusText: 'No result found.'});
+      } else {
+        console.log(error.response);
+      }
     }
   }
 
@@ -98,19 +105,37 @@ class SearchBar extends React.Component<myProps, myState> {
 
 const styles = StyleSheet.create({
   input: {
-    height: 60,
-    padding: 8,
+    height: 50,
+    padding: 5,
     margin: 5,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
   },
   btn: {
-    backgroundColor: '#c2bad8',
+    backgroundColor: '#439D43',
     padding: 9,
     margin: 5,
   },
   btnText: {
-    color: 'darkslateblue',
-    fontSize: 20,
+    color: 'white',
+    fontSize: 16,
     textAlign: 'center',
+  },
+  loadingText: {
+    textAlign: 'center',
+    marginTop: 30,
+  },
+  searchBarView: {
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
 });
 
