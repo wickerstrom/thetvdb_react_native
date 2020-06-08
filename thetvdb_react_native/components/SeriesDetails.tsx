@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
+import {getJWTToken} from '../common/functions';
 
 class SeriesDetails extends Component {
   constructor(props: any) {
@@ -28,7 +28,7 @@ class SeriesDetails extends Component {
   }
 
   async getInfo(id: string) {
-    const jwtToken = await this.getToken();
+    const jwtToken = await getJWTToken();
     const response = await this.getSeriesDetails(id, jwtToken);
     return response;
   }
@@ -51,23 +51,11 @@ class SeriesDetails extends Component {
     }
   }
 
-  async getToken() {
-    try {
-      const response = await AsyncStorage.getItem('@storage_Key');
-      console.log(response);
-      if (response !== null) {
-        return response;
-      }
-    } catch (e) {
-      return null;
-    }
-  }
-
   render() {
     return (
       <View>
         {this.state.isLoading ? (
-          <Text>'Loading ...'</Text>
+          <Text style={styles.loadingText}>Loading ...</Text>
         ) : (
           <View style={styles.seriesDetailsView}>
             <Text style={styles.seriesNameText}>
@@ -94,6 +82,10 @@ const styles = StyleSheet.create({
   seriesOverviewText: {
     textAlign: 'justify',
     padding: 5,
+  },
+  loadingText: {
+    textAlign: 'center',
+    marginTop: 30,
   },
 });
 

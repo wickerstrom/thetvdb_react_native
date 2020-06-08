@@ -1,7 +1,8 @@
 import React from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import ResultList from './ResultList';
+import {getJWTToken} from '../common/functions';
+import {BASE_URL} from '../config';
 
 import {
   View,
@@ -11,11 +12,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-type myProps = {};
+type Props = {};
 
-type myState = {searchText: string; searchResult: Array<JSON>};
+type State = {searchText: string; searchResult: Array<JSON>};
 
-class SearchBar extends React.Component<myProps, myState> {
+class SearchBar extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -55,8 +56,7 @@ class SearchBar extends React.Component<myProps, myState> {
   async getAllSeriesInfo(searchText: string) {
     if (searchText !== '' && searchText !== undefined) {
       this.setState({searchText: ''});
-      const jwtToken = await this.getToken();
-
+      const jwtToken = await getJWTToken();
       const response = await this.getSeriesSearchResult(searchText, jwtToken);
 
       if (response !== undefined && response !== null) {
@@ -67,8 +67,8 @@ class SearchBar extends React.Component<myProps, myState> {
 
   async getSeriesSearchResult(searchText: string, jwtToken: string) {
     this.setState({isLoading: true, statusText: 'Loading ...'});
-    const url = `https://api.thetvdb.com/search/series?name=${searchText}`;
-
+    const url = `${BASE_URL}search/series?name=${searchText}`;
+    console.log(url);
     try {
       const config = {
         headers: {Authorization: `Bearer ${jwtToken}`},
@@ -84,17 +84,6 @@ class SearchBar extends React.Component<myProps, myState> {
       } else {
         console.log(error.response);
       }
-    }
-  }
-
-  async getToken() {
-    try {
-      const response = await AsyncStorage.getItem('@storage_Key');
-      if (response !== null) {
-        return response;
-      }
-    } catch (e) {
-      return null;
     }
   }
 
