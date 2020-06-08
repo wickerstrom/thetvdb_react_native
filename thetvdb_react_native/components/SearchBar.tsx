@@ -3,7 +3,7 @@ import axios from 'axios';
 import ResultList from './ResultList';
 import {getJWTToken} from '../common/functions';
 // @ts-ignore
-import {BASE_URL} from '../config';
+import {BASE_URL, API_REQUEST_TIMEOUT_VALUE} from '../config';
 
 import {
   View,
@@ -80,6 +80,7 @@ class SearchBar extends React.Component<IProps, IState> {
     try {
       const config = {
         headers: {Authorization: `Bearer ${jwtToken}`},
+        timeout: API_REQUEST_TIMEOUT_VALUE,
       };
 
       const response = await axios.get(url, config);
@@ -88,8 +89,12 @@ class SearchBar extends React.Component<IProps, IState> {
     } catch (error) {
       if (error.response.status === 404) {
         this.setState({statusText: 'No result found.'});
+      } else if (error.code == 'ECONNABORTED') {
+        console.log(error.response);
+        this.setState({statusText: 'Connection Timeout: ' + error.response});
       } else {
         console.log(error.response);
+        this.setState({statusText: error.response});
       }
     }
   }

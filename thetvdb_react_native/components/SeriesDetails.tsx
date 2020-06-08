@@ -4,7 +4,7 @@ import {withNavigation} from 'react-navigation';
 import axios from 'axios';
 import {getJWTToken} from '../common/functions';
 // @ts-ignore
-import {BASE_URL} from '../config';
+import {BASE_URL, API_REQUEST_TIMEOUT_VALUE} from '../config';
 
 interface IProps {
   navigation: any;
@@ -13,6 +13,7 @@ interface IProps {
 interface IState {
   seriesInfo: Array<JSON>;
   isLoading: boolean;
+  statusText: string;
 }
 
 class SeriesDetails extends React.Component<IProps, IState> {
@@ -21,6 +22,7 @@ class SeriesDetails extends React.Component<IProps, IState> {
     this.state = {
       seriesInfo: [],
       isLoading: false,
+      statusText: 'Loading ...',
     };
   }
 
@@ -45,20 +47,26 @@ class SeriesDetails extends React.Component<IProps, IState> {
   }
 
   async getSeriesDetails(id: string, jwtToken: string | null | undefined) {
-    this.setState({isLoading: true});
+    this.setState({isLoading: true, statusText: 'Loading ...'});
     const url = `${BASE_URL}series/${id}`;
 
     try {
       const config = {
         headers: {Authorization: `Bearer ${jwtToken}`},
+        timeout: API_REQUEST_TIMEOUT_VALUE,
       };
 
       const response = await axios.get(url, config);
       this.setState({isLoading: false});
       return response;
     } catch (error) {
-      this.setState({isLoading: false});
-      console.log(error);
+      if (error.code == 'ECONNABORTED') {
+        console.log(error);
+        this.setState({statusText: 'Connection Timeout: ' + error.response});
+      } else {
+        console.log(error);
+        this.setState({statusText: error.response});
+      }
     }
   }
 
@@ -66,7 +74,7 @@ class SeriesDetails extends React.Component<IProps, IState> {
     return (
       <View>
         {this.state.isLoading ? (
-          <Text style={styles.loadingText}>Loading ...</Text>
+          <Text style={styles.loadingText}>{this.state.statusText}</Text>
         ) : (
           <View style={styles.seriesDetailsView}>
             <Text style={styles.seriesNameText}>

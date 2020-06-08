@@ -31,4 +31,4 @@ Due to time limitations there are some things that could be improved in the futu
 - Adding persistence, store the API response data and read it for repeated requests. Even
   when offline.
 - Create a favorite shows list
-- Further develop the UX/UI (i.e handling errors and user feedback).
+- Further develop the UX/UI.
