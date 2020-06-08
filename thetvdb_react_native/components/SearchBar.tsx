@@ -21,6 +21,7 @@ class SearchBar extends React.Component<myProps, myState> {
     this.state = {
       searchText: '',
       searchResult: [],
+      isLoading: false,
     };
   }
   render() {
@@ -37,9 +38,13 @@ class SearchBar extends React.Component<myProps, myState> {
           onPress={() => {
             this.getAllSeriesInfo(this.state.searchText);
           }}>
-          <Text style={styles.btnText}>Search</Text>
+          <Text style={styles.btnText}>Search </Text>
         </TouchableOpacity>
-        <ResultList searchResult={this.state.searchResult} />
+        {this.state.isLoading ? (
+          <Text>'Loading ...'</Text>
+        ) : (
+          <ResultList searchResult={this.state.searchResult} />
+        )}
       </View>
     );
   }
@@ -48,20 +53,18 @@ class SearchBar extends React.Component<myProps, myState> {
     if (searchText !== '' && searchText !== undefined) {
       this.setState({searchText: ''});
       const jwtToken = await this.getToken();
-      console.log(jwtToken);
 
       const response = await this.getSeriesSearchResult(searchText, jwtToken);
 
       if (response !== undefined && response !== null) {
-        console.log('hej');
         this.setState({searchResult: response.data.data});
       }
     }
   }
 
   async getSeriesSearchResult(searchText: string, jwtToken: string) {
+    this.setState({isLoading: true});
     const url = `https://api.thetvdb.com/search/series?name=${searchText}`;
-    console.log(url);
 
     try {
       const config = {
@@ -69,9 +72,10 @@ class SearchBar extends React.Component<myProps, myState> {
       };
 
       const response = await axios.get(url, config);
-      console.log(response);
+      this.setState({isLoading: false});
       return response;
     } catch (error) {
+      this.setState({isLoading: false});
       console.log(error);
     }
   }
