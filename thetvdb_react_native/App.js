@@ -1,74 +1,39 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet, ScrollView, View, Text} from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
+import SearchBar from './components/SearchBar';
+import ResultList from './components/ResultList';
 
 const App: () => React$Node = () => {
+  useEffect(() => {
+    getJwtToken();
+  });
+
+  function getJwtToken() {
+    const url = 'https://api.thetvdb.com/login';
+
+    axios
+      .post(url, {
+        apikey: 'ba3857d2d0970437b1dc8ef69a4abf81',
+        userkey: '5ED8E87EB0C6E5.17700117',
+        username: 'Wickerman',
+      })
+      .then(function(response) {
+        AsyncStorage.setItem('@storage_Key', response.data.token);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <View>
-            <View>
-              <Text>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
+        <SearchBar />
       </SafeAreaView>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
