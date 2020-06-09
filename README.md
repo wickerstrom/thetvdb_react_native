@@ -26,7 +26,7 @@ This application consists of two views, one where the user is able to search amo
 
 Due to time limitations there are some things that could be improved in the future:
 
-- Add tests
+- Adding tests
 - Develop the tv series details page, with more information and styling.
 - Adding persistence, store the API response data and read it for repeated requests. Even
   when offline.
