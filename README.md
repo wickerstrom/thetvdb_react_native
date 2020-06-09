@@ -8,7 +8,7 @@ TheTVDB - React Native Client is a React Native application for Android and iOS 
 2. Go to https://thetvdb.com/api-information to register and get credentials to use the TheTVDB-API.
 3. Clone this repository.
 4. Go to project root and run "npm install".
-5. Add a .env-file in the root of the React Native-folder, with your own TheTVDB-API credentials:
+5. Add a .env-file in the root of the React Native Project-folder (./thetvdb_react_native), with your own TheTVDB-API credentials:
 
 ```bash
 APIKEY="[YOUR API-KEY]"
@@ -26,7 +26,7 @@ This application consists of two views, one where the user is able to search amo
 
 Due to time limitations there are some things that could be improved in the future:
 
-- Add more tests
+- Add tests
 - Develop the tv series details page, with more information and styling.
 - Adding persistence, store the API response data and read it for repeated requests. Even
   when offline.
